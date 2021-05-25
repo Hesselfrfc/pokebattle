@@ -21,6 +21,8 @@ spl_autoload_register(function ($class_name) {
     print_r('<pre>' . $charmeleon . '</pre>');
 
     $charmeleon->test($pikachu);
+    echo "<br/>";
+    $pikachu->test($charmeleon);
 
     ?>
 
