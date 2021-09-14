@@ -20,9 +20,15 @@ spl_autoload_register(function ($class_name) {
     $charmeleon = new charmeleon('Charmeleon');
     print_r('<pre>' . $charmeleon . '</pre>');
 
-    $charmeleon->test($pikachu);
+    $charmeleon->test($pikachu, $charmeleon->attack["Flare"]);
     echo "<br/>";
-    $pikachu->test($charmeleon);
+    $pikachu->test($charmeleon, $pikachu->attack["Electric Ring"]);
+    echo "<br/>" . "<br/>";
+    $charmeleon->test($pikachu, $charmeleon->attack["Head Butt"]);
+    echo "<br/>";
+    $pikachu->test($charmeleon, $pikachu->attack["Pika Punch"]);
+
+    echo "<br/>" . "<br/>" . pokemon::getPopulation();
 
     ?>
 

@@ -1,6 +1,7 @@
 <?php
 
 class pokemon{
+    static $pokemonAmount;
     public $name;
     public $EnergyType;
     public $hitpoints;
@@ -16,15 +17,16 @@ class pokemon{
         $this->attack = $attack;
         $this->weakness = $weakness;
         $this->resistance = $resistance;
+        $this::$pokemonAmount++;
     }
 
     public function __toString() {
         return json_encode($this);
     }
 
-    public function test($target){
-        $attackName = $this->attack->name;
-        $targetAttackName = $target->attack->name;
+    public function test($target, $attack){
+        $attackName = $attack->getAttackName();
+        $targetAttackName = $attack->getAttackName();
 
         $energyTypeName = $this->getEnergyTypeName();
         $targetEnergyTypeName = $target->getEnergyTypeName();
@@ -39,7 +41,7 @@ class pokemon{
         $targetPokemonName = $target->getPokemonName();
 
         if($energyTypeName == $targetWeaknessTypeName){
-            $damage = $this->attack->damage * $target->weakness->multiplier;
+            $damage = $attack->getAttackDamage() * $target->weakness->multiplier;
             echo $pokemonName . " valt " . $targetPokemonName . " aan met " . $attackName . "<br/>";
             echo "Deze aanval doet " . $damage . " damage "  . "<br/>";
             echo "Aanval heeft erg veel effect" . "<br/>";
@@ -47,21 +49,23 @@ class pokemon{
             if($damage >=  $target->hitpoints){
                 $hpLeft = $target->hitpoints - $damage;
                 echo $targetPokemonName . " heeft " .  $hpLeft . " HP over" . "<br/>";
-                echo "rip makker";
+                echo $targetPokemonName . " has fainted!";
+                self::$pokemonAmount--;
             }else{
                 $hpLeft = $target->hitpoints - $damage;
                 echo $targetPokemonName . " heeft " .  $hpLeft . " HP over" . "<br/>";
             }
         }elseif($targetResistanceTypeName === $energyTypeName){
-            $damage = $this->attack->damage - $target->resistance->value;
+            $damage = $attack->getAttackDamage() - $target->resistance->value;
             echo $pokemonName . " valt " . $targetPokemonName . " aan met " . $attackName . "<br/>";
             echo "Deze aanval doet " . $damage . " damage "  . "<br/>";
             echo "Aanval heeft weinig effect" . "<br/>";
 
             if($damage >=  $target->hitpoints){
                 $hpLeft = $target->hitpoints - $damage;
-                echo $targetPokemonName . " heeft " .  $hpLeft . " HP over" . "<br/>";
-                echo "rip makker";
+                echo $targetPokemonName . " heeft " .  "0" . " HP over" . "<br/>";
+                echo $targetPokemonName . " has fainted!";
+                self::$pokemonAmount--;
             }else{
                 $hpLeft = $target->hitpoints - $damage;
                 echo $targetPokemonName . " heeft " .  $hpLeft . " HP over" . "<br/>";
@@ -72,12 +76,17 @@ class pokemon{
             if($damage >=  $target->hitpoints){
                 $hpLeft = $target->hitpoints - $damage;
                 echo $targetPokemonName . " heeft " .  $hpLeft . " HP over" . "<br/>";
-                echo "rip makker";
+                echo $targetPokemonName . " has fainted!";
+                self::$pokemonAmount--;
             }else{
                 $hpLeft = $target->hitpoints - $damage;
                 echo $targetPokemonName . " heeft " .  $hpLeft . " HP over" . "<br/>";
             }
         }
+    }
+
+    public static function getPopulation(){
+        return self::$pokemonAmount;
     }
 
     public function getEnergyTypeName(){
